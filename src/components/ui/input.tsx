@@ -1,0 +1,19 @@
+import * as React from "react";
+import { cn } from "@/lib/utils";
+
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+  return (
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(
+        // text-base sur mobile évite le zoom automatique d'iOS
+        "placeholder:text-muted-foreground border-input flex h-10 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs outline-none transition-[color,box-shadow] file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export { Input };
