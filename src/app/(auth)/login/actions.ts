@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
-import { isAllowedEmail } from "@/lib/env";
+import { isAllowedEmail, supabasePublicEnv } from "@/lib/env";
 
 export type LoginState = { ok: boolean; message: string } | null;
 
@@ -30,7 +30,18 @@ export async function envoyerLienMagique(
   });
 
   if (error) {
-    return { ok: false, message: `Envoi impossible : ${error.message}` };
+    // L'adresse du projet Supabase n'est pas secrète : l'afficher aide au diagnostic.
+    let hote = "?";
+    try {
+      hote = new URL(supabasePublicEnv().url).host;
+    } catch {}
+    const injoignable = /fetch failed|ENOTFOUND|getaddrinfo/i.test(error.message);
+    return {
+      ok: false,
+      message: injoignable
+        ? `Supabase injoignable à l'adresse « ${hote} ». Vérifiez NEXT_PUBLIC_SUPABASE_URL dans Vercel.`
+        : `Envoi impossible : ${error.message} (serveur : ${hote})`,
+    };
   }
   return {
     ok: true,
