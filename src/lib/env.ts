@@ -16,10 +16,24 @@ export function requireEnv(name: string): string {
   return value;
 }
 
+/**
+ * Ne garde que « https://xxxx.supabase.co » : tolère une URL copiée avec
+ * un chemin en trop (ex. « /rest/v1/ ») ou des espaces.
+ */
+export function normaliserUrlSupabase(raw: string | undefined): string | undefined {
+  const value = raw?.trim();
+  if (!value) return undefined;
+  try {
+    return new URL(value).origin;
+  } catch {
+    return value.replace(/\/+$/, "");
+  }
+}
+
 export function supabasePublicEnv() {
   // Accès explicite pour que Next.js puisse injecter ces valeurs côté navigateur.
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = normaliserUrlSupabase(process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
   if (!url || !anonKey) {
     throw new Error(
       "NEXT_PUBLIC_SUPABASE_URL et NEXT_PUBLIC_SUPABASE_ANON_KEY doivent être définies.",

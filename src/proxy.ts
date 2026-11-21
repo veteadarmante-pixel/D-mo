@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { normaliserUrlSupabase } from "@/lib/env";
 
 /**
  * Rafraîchit la session Supabase à chaque requête et protège les pages.
@@ -8,8 +9,8 @@ import { createServerClient } from "@supabase/ssr";
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = normaliserUrlSupabase(process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
   if (!url || !anonKey) return response;
 
   const supabase = createServerClient(url, anonKey, {
