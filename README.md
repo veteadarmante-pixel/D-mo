@@ -12,7 +12,7 @@ Recharts · Supabase (Postgres, Auth, Storage, RLS) · API Anthropic · Resend �
 
 - [x] (a) Base, connexion par lien magique, schéma de base de données, données d'exemple
 - [x] (b) Comptes, catégories et saisie manuelle
-- [ ] (c) Import CSV / Excel / PDF
+- [x] (c) Import CSV / Excel / PDF, saisie rapide en une ligne
 - [ ] (d) Catégorisation et règles
 - [ ] (e) Tableau de bord et objectifs
 - [ ] (f) Crons et emails

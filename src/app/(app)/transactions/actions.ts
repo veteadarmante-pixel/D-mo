@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/supabase/server";
 import { calculerHashUnique } from "@/lib/dedupe";
+import { appliquerRecurrences } from "@/lib/mouvements";
+import { masquerNumeros } from "@/lib/securite";
 import { estDateIso, messageErreurDb, parseMontant, texte } from "@/lib/parse";
 import type { FormState, TypeTransaction } from "@/lib/types";
 
@@ -14,9 +16,9 @@ function lireTransaction(formData: FormData) {
   if (type !== "depense" && type !== "revenu") throw new Error("Choisissez dépense ou revenu.");
   const date = texte(formData.get("date"));
   if (!estDateIso(date)) throw new Error("Date invalide.");
-  const description = texte(formData.get("description"));
+  const description = masquerNumeros(texte(formData.get("description")));
   if (!description) throw new Error("Ajoutez une description (ex. « Supermarché »).");
-  const commerce = texte(formData.get("commerce")) || description;
+  const commerce = masquerNumeros(texte(formData.get("commerce"))) || description;
   const montant = Math.abs(montantBrut);
 
   return {
@@ -66,6 +68,7 @@ export async function creerTransaction(_prev: FormState, formData: FormData): Pr
     }
   }
 
+  await appliquerRecurrences(supabase);
   revalidatePath("/", "layout");
   const signe = valeurs.type === "revenu" ? "+" : "−";
   return {

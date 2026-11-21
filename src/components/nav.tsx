@@ -18,13 +18,16 @@ export type NavItem = { href: string; label: string; icon: LucideIcon };
 export const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Budget", icon: LayoutDashboard },
   { href: "/transactions", label: "Mouvements", icon: List },
-  { href: "/transactions/nouveau", label: "Ajouter", icon: PlusCircle },
+  { href: "/importer", label: "Ajouter", icon: PlusCircle },
   { href: "/comptes", label: "Comptes", icon: Wallet },
   { href: "/parametres", label: "Réglages", icon: Settings },
 ];
 
 function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
+  if (href === "/importer") {
+    return pathname.startsWith("/importer") || pathname.startsWith("/transactions/nouveau");
+  }
   if (href === "/transactions") {
     return pathname.startsWith("/transactions") && !pathname.startsWith("/transactions/nouveau");
   }
