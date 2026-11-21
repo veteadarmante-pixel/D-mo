@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Settings, type LucideIcon } from "lucide-react";
+import {
+  LayoutDashboard,
+  List,
+  PlusCircle,
+  Settings,
+  Wallet,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type NavItem = { href: string; label: string; icon: LucideIcon };
@@ -10,11 +17,18 @@ export type NavItem = { href: string; label: string; icon: LucideIcon };
 // Les entrées s'ajoutent au fil des phases.
 export const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Budget", icon: LayoutDashboard },
+  { href: "/transactions", label: "Mouvements", icon: List },
+  { href: "/transactions/nouveau", label: "Ajouter", icon: PlusCircle },
+  { href: "/comptes", label: "Comptes", icon: Wallet },
   { href: "/parametres", label: "Réglages", icon: Settings },
 ];
 
 function isActive(pathname: string, href: string) {
-  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+  if (href === "/") return pathname === "/";
+  if (href === "/transactions") {
+    return pathname.startsWith("/transactions") && !pathname.startsWith("/transactions/nouveau");
+  }
+  return pathname.startsWith(href);
 }
 
 /** Barre du haut (ordinateur). */

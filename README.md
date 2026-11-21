@@ -11,7 +11,7 @@ Recharts · Supabase (Postgres, Auth, Storage, RLS) · API Anthropic · Resend �
 ## État d'avancement
 
 - [x] (a) Base, connexion par lien magique, schéma de base de données, données d'exemple
-- [ ] (b) Comptes, catégories et saisie manuelle
+- [x] (b) Comptes, catégories et saisie manuelle
 - [ ] (c) Import CSV / Excel / PDF
 - [ ] (d) Catégorisation et règles
 - [ ] (e) Tableau de bord et objectifs

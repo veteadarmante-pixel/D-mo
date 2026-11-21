@@ -41,3 +41,36 @@ export function formatDate(iso: string): string {
     timeZone: "UTC",
   }).format(new Date(Date.UTC(y, m - 1, d)));
 }
+
+/** « 2026-11 » → « novembre 2026 » */
+export function libelleMois(mois: string): string {
+  const [y, m] = mois.split("-").map(Number);
+  return new Intl.DateTimeFormat(APP_LOCALE, {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(y, m - 1, 1)));
+}
+
+/** Décale un mois « AAAA-MM » de n mois. */
+export function decalerMois(mois: string, n: number): string {
+  const [y, m] = mois.split("-").map(Number);
+  const d = new Date(Date.UTC(y, m - 1 + n, 1));
+  return d.toISOString().slice(0, 7);
+}
+
+/** Premier jour et premier jour du mois suivant (bornes de requête). */
+export function bornesMois(mois: string): { debut: string; finExclue: string } {
+  return { debut: `${mois}-01`, finExclue: `${decalerMois(mois, 1)}-01` };
+}
+
+/** « samedi 21 novembre » */
+export function formatJour(iso: string): string {
+  const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
+  return new Intl.DateTimeFormat(APP_LOCALE, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(y, m - 1, d)));
+}
